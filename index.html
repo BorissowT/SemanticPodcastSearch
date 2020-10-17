@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Podcastyourdream</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div>
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              Podcastyourdream
+            </a>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="tabs_menu d-flex">
+          <div class="tab tab_chosen">Optional</div>
+          <div class="tab">Swift</div>
+        </div>
+        <div class="optional_search_page">
+          <h1 class="title">Search Engine</h1>
+          <div class="row">
+            <div class="col col-md-2 hidden-sm hidden-xs"></div>
+            <div class="col col-xs-12 col-md-8">
+              <div class="row mb-3">
+                <div class="col col-xs-12">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="tagsField" placeholder="Anything you are interseted in...">
+                    <span class="input-group-btn">
+                      <button id="addButton" class="btn btn-light ml-1" type="button">Add!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h3>My interests:</h3>
+              </div> 
+              <div class="d-flex info flex-wrap"></div>
+              <div class="row">
+                <h4>Engine's suggestions:</h4>
+              </div> 
+            </div>
+            <div class="col col-md-2 hidden-sm hidden-xs"></div>
+          </div>
+          <div class="row">
+            <div class="col col-xs-12 text-center">
+              <button id="getPlaylistBtn" class="btn btn-light btn-lg">Get podcasts</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+    <script
+  src="http://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="music.js"></script>
+  </body>
+</html>
