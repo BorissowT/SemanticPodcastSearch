@@ -16,9 +16,21 @@ function addTagFromField() {
     }
 });
 }
+function getSynonymsArrayFromRespond(data){
+    var finalArray = [];
+    data.response.forEach(element=>{
+    var synonyms_array = [...element.list.synonyms.matchAll(/(\w|\s)(\w|\s)*\w/g)];
+    var filtered_synonyms_array = synonyms_array.filter(synonym => synonym[0] != "generic term");
+    var only_terms_array = filtered_synonyms_array.map(elem => elem[0]);
+    finalArray = finalArray.concat(only_terms_array);
+  }
+    );
+    let uniquefinalArray = [...new Set(finalArray)];
+    return uniquefinalArray;
+}
 function callForSynonyms(info){
   $.get(`http://thesaurus.altervista.org/thesaurus/v1?key=HPFgRxhyo2eYa7NMKxWH&word=${info}&language=en_US&output=json`,(data)=>{
-    console.log(data);
+    synonymsArray = getSynonymsArrayFromRespond(data);
   })
 };
 
@@ -29,7 +41,7 @@ $('#addButton').click(()=>{
 $('#tagsField').keyup(function(event) {
   if (event.which == 13) {
     const newtagpromise = addTagFromField();
-    newtagpromise.then(()=>{console.log("ok")}).catch((err)=>{console.log(err)});
+    newtagpromise.then((info)=>{callForSynonyms(info);}).catch((err)=>{console.log(err)});
   }
 });
 
