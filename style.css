@@ -44,6 +44,12 @@
   text-align: center;
   margin: 0.2em;
 }
-.info{
 
+#getMoreTags{
+  font-size: small;
+  opacity: 0.8;
+}
+
+#getPlaylistBtn{
+  width: 20em;
 }
