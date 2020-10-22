@@ -17,12 +17,7 @@ function addTagFromField() {
     }
 });
 }
-
-function fill30synonyms(synonymsArray){
-  var first30 = synonymsArray.splice(0,29);
-  engineSuggestions = engineSuggestions.concat(first30);
-  $(".engine").empty();
-  engineSuggestions.forEach((elem)=>$(".engine").append($('<div class="item"></div>').text(elem.word)));
+function addButtonMoreTags(){
   $("#getMoreTags").remove();
   if(synonymsArray.length>1){
     $("#search_field").after($('<div class="row my-1"><div class="col col-xs-12 text-center"><button id="getMoreTags" class="btn btn-light btn-lg">More suggestions +</button></div></div>'));
@@ -30,6 +25,13 @@ function fill30synonyms(synonymsArray){
       fill30synonyms(synonymsArray);
     })
   }
+}
+function fill30synonyms(synonymsArray){
+  var first30 = synonymsArray.splice(0,29);
+  engineSuggestions = engineSuggestions.concat(first30);
+  $(".engine").empty();
+  engineSuggestions.forEach((elem)=>$(".engine").append($('<div class="item"></div>').text(elem.word)));
+  addButtonMoreTags();
 
 }
 
@@ -47,6 +49,9 @@ function callForSynonyms(info){
     if($(".engine").children().length == 0){
         $("#engine_suggestion").append($("<h4>Engine's suggestions:</h4>"));
         fill30synonyms(synonymsArray);
+    }
+    else{
+      addButtonMoreTags();
     }
   })
 
