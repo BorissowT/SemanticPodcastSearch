@@ -1,6 +1,27 @@
 const podcastInfo = [];
 var engineSuggestions = [];
 
+function removeItemFromInterests(info, $item){
+  $item.remove();
+  for(i = 0; i < podcastInfo.length; i++){
+    if(podcastInfo[i] == info)
+      podcastInfo.splice(i,1);
+    }
+  renderList();
+}
+
+function renderList() {
+  if(podcastInfo.length==1 && $('#interests_title').length==0){
+    $("#my_intersts_title").append($("<h3 id='interests_title'>My interests:</h3>"));
+  }
+  $('.info').empty();
+  for (const info of podcastInfo) {
+    const $item = $('<div class="item"></div>').text(info);
+    $item.on('click', ()=>removeItemFromInterests(info, $item))
+    $('.info').append($item)
+  }
+}
+
 function addToMyIntersts(info){
   podcastInfo.push(info);
   renderList();
@@ -20,6 +41,7 @@ function addTagFromField() {
     }
 });
 }
+
 function addButtonMoreTags(){
   $("#getMoreTags").remove();
   if(synonymsArray.length>1){
@@ -37,6 +59,7 @@ function deleteElementFromSuggestions(elem){
     engineSuggestions.splice(i,1);
   }
 }
+
 function addThisElementToMyInterests(elem){
   deleteElementFromSuggestions(elem);
   addToMyIntersts(elem.text());
@@ -74,29 +97,23 @@ function callForSynonyms(info){
     }
   })
 
-};
+}
 
-$('#addButton').click(()=>{
+function fillSuggestions(){
   const newtagpromise = addTagFromField();
-  newtagpromise.then((info)=>{callForSynonyms(info);}).catch((err)=>{console.log(err)});
-});
+  newtagpromise
+  .then((info)=>{callForSynonyms(info);})
+  .catch((err)=>{console.log(err)});
+}
+
+$('#addButton').on('click', ()=>{fillSuggestions()})
+
 $('#tagsField').keyup(function(event) {
   if (event.which == 13) {
-    const newtagpromise = addTagFromField();
-    newtagpromise.then((info)=>{callForSynonyms(info);}).catch((err)=>{console.log(err)});
+    fillSuggestions();
   }
 });
 
-function renderList() {
-  if(podcastInfo.length==1){
-    $("#my_intersts_title").append($("<h3>My interests:</h3>"));
-  }
-  $('.info').empty();
-  for (const info of podcastInfo) {
-    const $item = $('<div class="item"></div>').text(info);
-    $('.info').append($item)
-  }
-}
 
 $('#getPlaylistBtn').click(function (event) {
   // TODO: Display a list of music.
