@@ -1,13 +1,16 @@
 const podcastInfo = [];
 var engineSuggestions = [];
 
+function addToMyIntersts(info){
+  podcastInfo.push(info);
+  renderList();
+}
+
 function addTagFromField() {
   return new Promise((resolve, reject)=>{
     const info = $('#tagsField').eq(0).val();
-   
     if(info.length > 2){
-      podcastInfo.push(info);
-      renderList();
+      addToMyIntersts(info);
       $('#tagsField').eq(0).val('');
       return resolve(info);
     }
@@ -27,11 +30,16 @@ function addButtonMoreTags(){
   }
 }
 
-function addThisElementToMyInterests(elem){
-  var index = -1;
-  
+function deleteElementFromSuggestions(elem){
   elem.remove();
-  // console.log(engineSuggestions);
+  for(i = 0; i < engineSuggestions.length; i++){
+  if(engineSuggestions[i].word == elem.text())
+    engineSuggestions.splice(i,1);
+  }
+}
+function addThisElementToMyInterests(elem){
+  deleteElementFromSuggestions(elem);
+  addToMyIntersts(elem.text());
 }
 
 function fill30synonyms(synonymsArray){
@@ -44,7 +52,6 @@ function fill30synonyms(synonymsArray){
     $(".engine").append(suggestion);
 });
   addButtonMoreTags();
-  console.log(engineSuggestions);
 }
 
 function getSynonymsArrayFromRespond(data){
@@ -96,5 +103,3 @@ $('#getPlaylistBtn').click(function (event) {
   // You may use anything from musicInfo.
   console.log('Testing Music Call');
 });
-
-
