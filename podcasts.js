@@ -26,13 +26,25 @@ function addButtonMoreTags(){
     })
   }
 }
+
+function addThisElementToMyInterests(elem){
+  var index = -1;
+  
+  elem.remove();
+  // console.log(engineSuggestions);
+}
+
 function fill30synonyms(synonymsArray){
   var first30 = synonymsArray.splice(0,29);
   engineSuggestions = engineSuggestions.concat(first30);
   $(".engine").empty();
-  engineSuggestions.forEach((elem)=>$(".engine").append($('<div class="item"></div>').text(elem.word)));
+  engineSuggestions.forEach((elem)=>{
+  var suggestion = $('<div class="suggestion"></div>').text(elem.word);
+  suggestion.on("click", function(){addThisElementToMyInterests($(this))})
+    $(".engine").append(suggestion);
+});
   addButtonMoreTags();
-
+  console.log(engineSuggestions);
 }
 
 function getSynonymsArrayFromRespond(data){
