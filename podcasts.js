@@ -23,8 +23,12 @@ function renderList() {
 }
 
 function addToMyIntersts(info){
+  if(checkIfItemInInterests(info)){
   podcastInfo.push(info);
   renderList();
+  }
+  else
+    throw "Element is already added";
 }
 
 function addTagFromField() {
@@ -60,7 +64,7 @@ function deleteElementFromSuggestions(elem){
   }
 }
 
-function addThisElementToMyInterests(elem){
+function addSuggestionToMyInterests(elem){
   deleteElementFromSuggestions(elem);
   addToMyIntersts(elem.text());
 }
@@ -71,7 +75,7 @@ function fill30synonyms(synonymsArray){
   $(".engine").empty();
   engineSuggestions.forEach((elem)=>{
   var suggestion = $('<div class="suggestion"></div>').text(elem.word);
-  suggestion.on("click", function(){addThisElementToMyInterests($(this))})
+  suggestion.on("click", function(){addSuggestionToMyInterests($(this))})
     $(".engine").append(suggestion);
 });
   addButtonMoreTags();
@@ -104,6 +108,16 @@ function fillSuggestions(){
   newtagpromise
   .then((info)=>{callForSynonyms(info);})
   .catch((err)=>{console.log(err)});
+}
+
+function checkIfItemInInterests(item){
+  var state = true;
+  podcastInfo.forEach((element)=>{
+    if(element==item){
+      state = false;
+    }
+  })
+  return state;
 }
 
 $('#addButton').on('click', ()=>{fillSuggestions()})
