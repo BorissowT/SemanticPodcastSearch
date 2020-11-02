@@ -1,21 +1,22 @@
-const podcastInfo = [];
+const myInterests = [];
 var engineSuggestions = [];
+var itunesResponse = [];
 
 function removeItemFromInterests(info, $item){
   $item.remove();
-  for(i = 0; i < podcastInfo.length; i++){
-    if(podcastInfo[i] == info)
-      podcastInfo.splice(i,1);
+  for(i = 0; i < myInterests.length; i++){
+    if(myInterests[i] == info)
+      myInterests.splice(i,1);
     }
   renderList();
 }
 
-function renderList() {
-  if(podcastInfo.length==1 && $('#interests_title').length==0){
+function renderList(){
+  if(myInterests.length==1 && $('#interests_title').length==0){
     $("#my_intersts_title").append($("<h3 id='interests_title'>My interests:</h3>"));
   }
   $('.info').empty();
-  for (const info of podcastInfo) {
+  for (const info of myInterests) {
     const $item = $('<div class="item"></div>').text(info);
     $item.on('click', ()=>removeItemFromInterests(info, $item))
     $('.info').append($item)
@@ -24,14 +25,14 @@ function renderList() {
 
 function addToMyIntersts(info){
   if(checkIfItemInInterests(info)){
-  podcastInfo.push(info);
+  myInterests.push(info);
   renderList();
   }
   else
     throw "Element is already added";
 }
 
-function addTagFromField() {
+function addTagFromField(){
   return new Promise((resolve, reject)=>{
     const info = $('#tagsField').eq(0).val();
     if(info.length > 2){
@@ -112,12 +113,31 @@ function fillSuggestions(){
 
 function checkIfItemInInterests(item){
   var state = true;
-  podcastInfo.forEach((element)=>{
+  myInterests.forEach((element)=>{
     if(element==item){
       state = false;
     }
   })
   return state;
+}
+
+function filterSimilarPodcasts(){
+  console.log(itunesResponse);
+}
+
+
+function* ajaxItunes(){
+  for(var i=0; i<myInterests.length; i++){
+    yield $.get(`https://itunes.apple.com/search?term=${myInterests[i]}&limit=200&media=podcast&entity=podcast`).then((response)=>{
+       response = JSON.parse(response);
+       itunesResponse = itunesResponse.concat(response.results);
+     });
+   }
+ }
+
+
+function requestToItunes(){
+Promise.all(ajaxItunes()).then(()=>{filterSimilarPodcasts()});
 }
 
 $('#addButton').on('click', ()=>{fillSuggestions()})
@@ -128,9 +148,6 @@ $('#tagsField').keyup(function(event) {
   }
 });
 
-
 $('#getPlaylistBtn').click(function (event) {
-  // TODO: Display a list of music.
-  // You may use anything from musicInfo.
-  console.log('Testing Music Call');
+  requestToItunes();
 });
