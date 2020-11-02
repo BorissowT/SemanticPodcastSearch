@@ -121,10 +121,32 @@ function checkIfItemInInterests(item){
   return state;
 }
 
-function filterSimilarPodcasts(){
-  console.log(itunesResponse);
+function count_duplicate(idlist){
+ let counts = {};
+ var duplicates = [];
+ for(let i =0; i < idlist.length; i++){ 
+     if (counts[idlist[i]]){
+     counts[idlist[i]] += 1;
+     } else {
+     counts[idlist[i]] = 1;
+     }
+    }  
+    for (let prop in counts){
+        if (counts[prop] >= 2){
+          duplicates.push({"trackid":prop,"counts":counts[prop]})
+        }
+    }
+    duplicates.sort(function(a, b){return b.counts-a.counts});
 }
 
+function filterSimilarPodcasts(){
+  var tracks = []
+  itunesResponse.forEach((elem)=>{
+   tracks.push(elem.trackId)
+  });
+  tracks.sort(function(a, b){return b-a});
+  count_duplicate(tracks);
+}
 
 function* ajaxItunes(){
   for(var i=0; i<myInterests.length; i++){
@@ -134,7 +156,6 @@ function* ajaxItunes(){
      });
    }
  }
-
 
 function requestToItunes(){
 Promise.all(ajaxItunes()).then(()=>{filterSimilarPodcasts()});
