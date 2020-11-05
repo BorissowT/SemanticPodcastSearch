@@ -23,7 +23,7 @@
           <div class="tab">Options</div>
         </div>
         <div class="optional_search_page">
-          <h1 class="title">Search Engine</h1>
+          <!-- <h1 class="title">Search Engine</h1>
           <div id="search_field" class="row">
             <div class="col col-md-2 hidden-sm hidden-xs"></div>
             <div class="col col-xs-12 col-md-8">
@@ -46,14 +46,48 @@
           </div>
           <div class="d-flex justify-content-center px-2 mt-3">
             <button id="getPlaylistBtn" class="btn btn-light btn-lg">Get podcasts</button>
+          </div> -->
+          <div class="result_podcasts">
+
+            <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active" data-interval="">
+                  <img src="https://is2-ssl.mzstatic.com/image/thumb/Podcasts123/v4/90/3b/3b/903b3b74-32ee-a7c8-31c4-25d29b0834ea/mza_5337915222858011024.jpg/600x600bb.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item"data-interval="">
+                  <img src="download.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="..." class="d-block w-100" alt="...">
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+            <div class="description_area pl-4 pt-2">
+              <h6 class="podcast_title "></h6>
+              <div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div>
+              <h6 >Description:</h6>
+              <p class="podcast_description">Three years after being named the Chin emperor Aaron Turner is busy building a new capital city and hiring archeologists, two endeavors he could happily pursue for the next several years. Unfortunately, his divided empire is close to war, assassins are trying to kill him, entire nations want his head, and a Talented prophet has declared a multinational religious crusade against him. Offsetting these threats are Aaron's ill prepared army, inferior weapons, questionable generalship, and the insight of Delmac, a Clan savage who has wanted Aaron dead for nearly twenty years. </p>
+            </div>
+            
           </div>
         </div>
+        
       </div>  
     <script
   src="http://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="podcasts.js"></script>
   </body>
 </html>

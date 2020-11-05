@@ -74,3 +74,42 @@ background-color: rgb(105, 136, 105)  ;
 #getPlaylistBtn{
   width: 20em;
 }
+
+.carousel{
+  width: 25%;
+  height: 15em;
+}
+
+.result_podcasts{
+  padding-right: 5%;
+  padding-left: 5%;
+  height: 15em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.carousel-control-prev{
+  height: 90%;
+}
+
+.carousel-control-next{
+  height: 90%;
+}
+
+.d-block{
+  border-radius: 10px;
+}
+
+.description_area{
+  border: 1px solid rgb(104, 100, 100);
+  border-radius: 10px;
+  height: 100%;
+  width: 80%;
+  margin-left: 3em;
+}
+
+.podcast_description{
+  margin-left: 1em;
+  font-size: 15px;
+}

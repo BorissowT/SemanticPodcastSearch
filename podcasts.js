@@ -148,6 +148,14 @@ function filterSimilarPodcasts(){
   count_duplicate(tracks);
 }
 
+function clearSearchField(){
+  $(".optional_search_page").empty();
+}
+
+function showItunesPodcasts(){
+
+}
+
 function* ajaxItunes(){
   for(var i=0; i<myInterests.length; i++){
     yield $.get(`https://itunes.apple.com/search?term=${myInterests[i]}&limit=200&media=podcast&entity=podcast`).then((response)=>{
@@ -158,7 +166,9 @@ function* ajaxItunes(){
  }
 
 function requestToItunes(){
-Promise.all(ajaxItunes()).then(()=>{filterSimilarPodcasts()});
+Promise.all(ajaxItunes())
+  .then(()=>{filterSimilarPodcasts()})
+  .then(()=>{showItunesPodcasts()});
 }
 
 $('#addButton').on('click', ()=>{fillSuggestions()})
@@ -170,5 +180,10 @@ $('#tagsField').keyup(function(event) {
 });
 
 $('#getPlaylistBtn').click(function (event) {
+  clearSearchField();
   requestToItunes();
 });
+
+$('.carousel').carousel({
+  interval: false
+})
