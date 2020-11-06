@@ -83,10 +83,7 @@ background-color: rgb(105, 136, 105)  ;
 .result_podcasts{
   padding-right: 5%;
   padding-left: 5%;
-  height: 15em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  
 }
 
 .carousel-control-prev{
@@ -107,9 +104,18 @@ background-color: rgb(105, 136, 105)  ;
   height: 100%;
   width: 80%;
   margin-left: 3em;
+  overflow-y: auto;
+  padding-bottom: 2em;
 }
 
 .podcast_description{
   margin-left: 1em;
   font-size: 15px;
+}
+
+.result_container{
+  height: 15em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
