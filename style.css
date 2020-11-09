@@ -105,6 +105,7 @@ background-color: rgb(105, 136, 105)  ;
   width: 80%;
   margin-left: 3em;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-bottom: 2em;
 }
 
@@ -118,4 +119,12 @@ background-color: rgb(105, 136, 105)  ;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.podcast_keywords{
+  word-break: break-all
+}
+
+h6{
+  font-style: italic;
 }

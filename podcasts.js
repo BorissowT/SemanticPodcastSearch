@@ -154,7 +154,6 @@ function getbestMatchesItunes(duplicatesIds){
       }
     });
   });
- console.log(bestMatchesItunes);
 }
 
 function count_duplicates(idlist){
@@ -188,12 +187,33 @@ function filterSimilarPodcasts(){
 function clearSearchField(){
   $(".optional_search_page").empty();
 }
-          
+     
+function fillBestMatch(elem){
+  $.ajax({
+    url: elem.feedUrl,
+    dataType: "xml"
+  }).then((xml)=>{
+    var description = $(xml).find('rss').find('channel').find('itunes\\:summary').first().text();
+    var author = $(xml).find('rss').find('channel').find('itunes\\:author').first().text();
+    var keywords = $(xml).find('rss').find('channel').find('itunes\\:keywords').first().text();
+    var title = $(xml).find('rss').find('channel').find('title').first().text();
+    $(".podcast_description").text(description);
+    $(".podcast_author").text(author);
+    $(".podcast_keywords").text(keywords);
+    $(".podcast_title").text(title);
+    $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
+    });
+}
+
+
 function showItunesPodcasts(){
-$(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""></div></div><a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h6 class="podcast_title "></h6><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 >Description:</h6><p class="podcast_description"></p><div class="d-flex"><h6>genres:</h6><h6 class="ml-2 podcast_genres"></h6></div></div></div></div>'));
+$(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""><img class="d-block w-100" src="..." alt="First slide"></div></div><a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h4 class="podcast_title mb-2"></h4><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 >Description:</h6><p class="podcast_description"></p><h6>link:</h6><a href="" class="ml-2 podcast_link" target="_blank"></a><h6>keywords:</h6><p class="ml-2 podcast_keywords"></h6></div></div>'));
 $('.carousel').carousel({
   interval: false
 });
+fillBestMatch(bestMatchesItunes[0]);
+// $(".carousel-item active").attr("src",bestMatchesItunes[0].artworkUrl600);
+$(".carousel-item").children().first().attr("src", bestMatchesItunes[0].artworkUrl600)
 }
 
 function* ajaxItunes(){
