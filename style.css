@@ -99,13 +99,9 @@ background-color: rgb(105, 136, 105)  ;
 }
 
 .description_area{
-  border: 1px solid rgb(104, 100, 100);
-  border-radius: 10px;
   height: 100%;
-  width: 80%;
+  width: 100%;
   margin-left: 3em;
-  overflow-y: auto;
-  overflow-x: hidden;
   padding-bottom: 2em;
 }
 
@@ -115,10 +111,14 @@ background-color: rgb(105, 136, 105)  ;
 }
 
 .result_container{
-  height: 15em;
+  height: 20em;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid rgb(104, 100, 100);
+  border-radius: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .podcast_keywords{
@@ -127,4 +127,13 @@ background-color: rgb(105, 136, 105)  ;
 
 h6{
   font-style: italic;
+}
+
+.get_description{
+  height: 2em;
+  width: 7em;
+  border-radius: 10px;
+}
+.get_description:hover{
+  opacity: 0.5;
 }

@@ -139,7 +139,7 @@ function checkIfItemInInterests(item){
 function ifMatchInBestMatchesItunes(elem){
   var duplFlag = true;
   bestMatchesItunes.forEach((match)=>{
-    if(elem.trackId==match.trackId)
+    if(elem.trackViewUrl==match.trackViewUrl)
       duplFlag = false;
   })
   return duplFlag;
@@ -149,8 +149,9 @@ function getbestMatchesItunes(duplicatesIds){
   duplicatesIds.forEach((dupl)=>{
     itunesResponse.forEach((resp)=>{
       if(dupl.trackid==resp.trackId){
-        if(ifMatchInBestMatchesItunes(resp))
+        if(ifMatchInBestMatchesItunes(resp)){
           bestMatchesItunes.push(resp);
+        }
       }
     });
   });
@@ -188,32 +189,85 @@ function clearSearchField(){
   $(".optional_search_page").empty();
 }
      
+// function fillFirstBestMatch(elem){
+//   $.ajax({
+//     url: elem.feedUrl,
+//     dataType: "xml",
+//     crossDomain: true
+//   }).then((xml)=>{
+//     var description = $(xml).find('rss').find('channel').find('itunes\\:summary').first().text();
+//     var author = $(xml).find('rss').find('channel').find('itunes\\:author').first().text();
+//     var keywords = $(xml).find('rss').find('channel').find('itunes\\:keywords').first().text();
+//     var title = $(xml).find('rss').find('channel').find('title').first().text();
+//     $(".podcast_description").text(description);
+//     $(".podcast_author").text(author);
+//     $(".podcast_keywords").text(keywords);
+//     $(".podcast_title").text(title);
+//     $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
+//     });
+// }
+
 function fillBestMatch(elem){
-  $.ajax({
-    url: elem.feedUrl,
-    dataType: "xml"
-  }).then((xml)=>{
-    var description = $(xml).find('rss').find('channel').find('itunes\\:summary').first().text();
-    var author = $(xml).find('rss').find('channel').find('itunes\\:author').first().text();
-    var keywords = $(xml).find('rss').find('channel').find('itunes\\:keywords').first().text();
-    var title = $(xml).find('rss').find('channel').find('title').first().text();
-    $(".podcast_description").text(description);
-    $(".podcast_author").text(author);
-    $(".podcast_keywords").text(keywords);
-    $(".podcast_title").text(title);
-    $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
-    });
+  $(".podcast_author").text(elem.artistName);
+  $(".podcast_keywords").text(elem.genres);
+  $(".podcast_title").text(elem.trackName);
+  $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
 }
 
+function* BestMatchGenerator(){
+  var stop = bestMatchesItunes.length;
+    for(var i=0;i<=stop;i++){
+      if(i == stop){
+        i = 0;
+      }
+      if (direction=="prev"){
+        i=i-2;
+        if(i == -1){
+          i = stop-1;
+        }
+        if(i == -2 ){
+          i = stop-2;
+        }
+        fillBestMatch(bestMatchesItunes[i]);
+        var direction = yield bestMatchesItunes[i];
+      }
+      else{
+        fillBestMatch(bestMatchesItunes[i]);
+        var direction = yield bestMatchesItunes[i];
+      }
+    }
+}
 
+function fillPictures(){
+
+  for(var i=1; i<bestMatchesItunes.length; i++)
+{
+  
+    $(".carousel-inner").append($(`<div class="carousel-item" data-interval=""><img class="d-block w-100" src="${bestMatchesItunes[i].artworkUrl600}" alt="First slide">`));
+  
+}
+}
+ 
 function showItunesPodcasts(){
-$(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""><img class="d-block w-100" src="..." alt="First slide"></div></div><a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h4 class="podcast_title mb-2"></h4><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 >Description:</h6><p class="podcast_description"></p><h6>link:</h6><a href="" class="ml-2 podcast_link" target="_blank"></a><h6>keywords:</h6><p class="ml-2 podcast_keywords"></h6></div></div>'));
+$(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide mt-4 ml-4" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""><img class="d-block w-100" src="..." alt="First slide"></div></div><a class="carousel-control-prev ok" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h4 class="podcast_title mb-2"></h4><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 >Description:</h6><button class="get_description">Get details</button><p class="podcast_description"></p><h6>link:</h6><a href="" class="ml-2 podcast_link" target="_blank"></a><h6>keywords:</h6><p class="ml-2 podcast_keywords"></h6></div></div>'));
 $('.carousel').carousel({
   interval: false
 });
-fillBestMatch(bestMatchesItunes[0]);
-// $(".carousel-item active").attr("src",bestMatchesItunes[0].artworkUrl600);
-$(".carousel-item").children().first().attr("src", bestMatchesItunes[0].artworkUrl600)
+var matchGen = BestMatchGenerator();
+matchGen.next();
+$(".carousel-control-next").on("click", ()=>{
+  matchGen.next("next");
+});
+$(".carousel-control-prev").on("click", ()=>{
+  matchGen.next("prev");
+});
+$(".carousel-item").children().first().attr("src", bestMatchesItunes[0].artworkUrl600);
+fillPictures();
+setTimeout(()=>{
+  $(".carousel-control-next").effect("shake");
+  $(".carousel-control-prev").effect("shake");
+}, 1000);
+
 }
 
 function* ajaxItunes(){
