@@ -212,6 +212,7 @@ function fillBestMatch(elem){
   $(".podcast_keywords").text(elem.genres);
   $(".podcast_title").text(elem.trackName);
   $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
+  $(".get_description").attr("value", elem.feedUrl);
 }
 
 function* BestMatchGenerator(){
@@ -267,7 +268,9 @@ setTimeout(()=>{
   $(".carousel-control-next").effect("shake");
   $(".carousel-control-prev").effect("shake");
 }, 1000);
-
+$(".get_description").on("click", ()=>{
+  console.log($(this).attr("class"))
+})
 }
 
 function* ajaxItunes(){
