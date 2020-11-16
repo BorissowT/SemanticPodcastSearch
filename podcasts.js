@@ -189,30 +189,23 @@ function clearSearchField(){
   $(".optional_search_page").empty();
 }
      
-// function fillFirstBestMatch(elem){
-//   $.ajax({
-//     url: elem.feedUrl,
-//     dataType: "xml",
-//     crossDomain: true
-//   }).then((xml)=>{
-//     var description = $(xml).find('rss').find('channel').find('itunes\\:summary').first().text();
-//     var author = $(xml).find('rss').find('channel').find('itunes\\:author').first().text();
-//     var keywords = $(xml).find('rss').find('channel').find('itunes\\:keywords').first().text();
-//     var title = $(xml).find('rss').find('channel').find('title').first().text();
-//     $(".podcast_description").text(description);
-//     $(".podcast_author").text(author);
-//     $(".podcast_keywords").text(keywords);
-//     $(".podcast_title").text(title);
-//     $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
-//     });
-// }
+function fillDescription(url){
+  $.ajax({
+    url: url,
+    dataType: "xml",
+    crossDomain: true
+  }).then((xml)=>{
+    var description = $(xml).find('rss').find('channel').find('itunes\\:summary').first().text();
+    $(".podcast_description").text(description);
+    });
+}
 
 function fillBestMatch(elem){
   $(".podcast_author").text(elem.artistName);
   $(".podcast_keywords").text(elem.genres);
   $(".podcast_title").text(elem.trackName);
   $(".podcast_link").attr("href", elem.trackViewUrl).text("link to the podcast in the platform");
-  $(".get_description").attr("value", elem.feedUrl);
+  fillDescription(elem.feedUrl);
 }
 
 function* BestMatchGenerator(){
@@ -239,38 +232,95 @@ function* BestMatchGenerator(){
     }
 }
 
-function fillPictures(){
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+function fillPictures(){
   for(var i=1; i<bestMatchesItunes.length; i++)
 {
-  
     $(".carousel-inner").append($(`<div class="carousel-item" data-interval=""><img class="d-block w-100" src="${bestMatchesItunes[i].artworkUrl600}" alt="First slide">`));
-  
 }
+}
+
+function getElsePodcasts(){
+  shuffle(itunesResponse);
+  $("#elseTitle").text("Similar to the Querry");
+  var canvas = $(".else_podcasts");
+  canvas.fadeTo( "slow" , 0.1, function() {
+    canvas.empty();
+    canvas.css("opacity", 1);
+    var first10 = itunesResponse.splice(0,9);
+    first10.forEach((elem)=>{
+    canvas.append($(`<div class="d-flex flex-wrap my-2"><img class="else_picture" src="${elem.artworkUrl600}" height="150px"><div class="ml-2"><div class="elseTitle" id="${elem.trackId}">${elem.trackName}</div><h6>by:${elem.artistName}</h6><h6>keywords:</h6><p>${elem.genres}</p><button value="${elem.feedUrl}" class="get_description"><a target="_blank" href="${elem.trackViewUrl}">Get more</a></button></div></div><hr>`)
+    );
+  })
+  });
+}
+
+function createNewPageForResult(){
+  $(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide mt-4 ml-4" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""><img class="d-block w-100" src="..." alt="First slide"></div></div><a class="carousel-control-prev ok" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h4 class="podcast_title mb-2"></h4><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 id="description_title">Description:</h6><p class="podcast_description"></p><h6>link:</h6><a href="" class="ml-2 podcast_link" target="_blank"></a><h6>keywords:</h6><p class="ml-2 podcast_keywords"></h6></div></div><h3 id="elseTitle" class="my-2"></h3><div class="mt-3 else_podcasts"></div><div class="d-flex justify-content-center"><button class="getElseButton">Get else</button></div></div>'));
+  $('.carousel').carousel({
+    interval: false
+  });
 }
  
+function setFailureCanvas(){
+  $(".optional_search_page").append($('<div class="d-flex justify-content-center"><h3>Seems to be empty here... check out these podcasts or try to search again</h3></div><div class="mx-4"><div class="mt-3 else_podcasts"></div><div class="d-flex justify-content-center"><button  class="getElseButton">Get else</button></div></div>'));
+}
+
+function fillInfoInNewPage(){
+  var matchGen = BestMatchGenerator();
+  matchGen.next();
+  $(".carousel-control-next").on("click", ()=>{
+    matchGen.next("next");
+  });
+  $(".carousel-control-prev").on("click", ()=>{
+    matchGen.next("prev");
+  });
+  $(".carousel-item").children().first().attr("src", bestMatchesItunes[0].artworkUrl600);
+  fillPictures();
+  setTimeout(()=>{
+    $(".carousel-control-next").effect("shake");
+    $(".carousel-control-prev").effect("shake");
+  }, 1000);
+}
+
+function setListenerToElseButton(){
+  $(".getElseButton").on("click", ()=>{
+    getElsePodcasts();
+    location.href = "#";
+    location.href = "#elseTitle";
+  });
+}
+
 function showItunesPodcasts(){
-$(".optional_search_page").append($('<div class="result_podcasts"><div class="d-flex mx-0 mb-4"><img class="mr-3" src="logos/png-transparent-podcast-itunes-app-store-apple-purple-violet-magenta-removebg-preview.png" height="40px" width="40px"><h3>Itunes Podcasts the best match</h3></div><div class="result_container"><div id="carouselExampleInterval" class="carousel slide mt-4 ml-4" data-ride="carousel"><div class="carousel-inner"><div class="carousel-item active" data-interval=""><img class="d-block w-100" src="..." alt="First slide"></div></div><a class="carousel-control-prev ok" href="#carouselExampleInterval" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div><div class="description_area pl-4 pt-2"><h4 class="podcast_title mb-2"></h4><div class="d-flex"><h6>by:</h6><h6 class="ml-2 podcast_author"></h6></div><h6 >Description:</h6><button class="get_description">Get details</button><p class="podcast_description"></p><h6>link:</h6><a href="" class="ml-2 podcast_link" target="_blank"></a><h6>keywords:</h6><p class="ml-2 podcast_keywords"></h6></div></div>'));
-$('.carousel').carousel({
-  interval: false
-});
-var matchGen = BestMatchGenerator();
-matchGen.next();
-$(".carousel-control-next").on("click", ()=>{
-  matchGen.next("next");
-});
-$(".carousel-control-prev").on("click", ()=>{
-  matchGen.next("prev");
-});
-$(".carousel-item").children().first().attr("src", bestMatchesItunes[0].artworkUrl600);
-fillPictures();
-setTimeout(()=>{
-  $(".carousel-control-next").effect("shake");
-  $(".carousel-control-prev").effect("shake");
-}, 1000);
-$(".get_description").on("click", ()=>{
-  console.log($(this).attr("class"))
-})
+  if(bestMatchesItunes.length>0){
+  createNewPageForResult();
+  fillInfoInNewPage();
+  setListenerToElseButton();
+  }
+  else{
+    
+    setFailureCanvas();
+    getElsePodcasts();
+    setListenerToElseButton();
+  }
 }
 
 function* ajaxItunes(){
